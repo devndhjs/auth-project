@@ -7,7 +7,12 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        // const auth = req.headers['authorization'];
+        // console.log('🔑 Raw Authorization header:', auth);
+        const auth = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+        return auth;
+      },
       secretOrKey: 'SECRET_KEY', // TODO: move to config
     });
   }
