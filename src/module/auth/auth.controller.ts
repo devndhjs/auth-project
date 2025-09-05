@@ -1,9 +1,10 @@
 // src/auth/auth.controller.ts
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt.guard';
 import { Roles } from './roles.decorator';
 import { RolesGuard } from './roles.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -35,5 +36,20 @@ export class AuthController {
   @Post('admin-only')
   adminOnly(@Req() req) {
     return { message: `Hello Admin ${req.user.email}` };
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // redirect sang Google
+  }
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req) {
+    return {
+      message: 'Google login success',
+      user: req.user, // thông tin từ GoogleStrategy.validate()
+    };
   }
 }
