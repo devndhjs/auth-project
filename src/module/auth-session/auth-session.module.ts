@@ -10,4 +10,4 @@ import { AuthController } from './auth-session.controller';
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthSessionModule {}
