@@ -2,6 +2,8 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt.guard';
+import { Roles } from './roles.decorator';
+import { RolesGuard } from './roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,5 +28,12 @@ export class AuthController {
   @Post('profile')
   profile(@Req() req) {
     return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Post('admin-only')
+  adminOnly(@Req() req) {
+    return { message: `Hello Admin ${req.user.email}` };
   }
 }
